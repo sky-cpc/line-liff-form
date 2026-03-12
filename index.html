@@ -70,7 +70,8 @@
     }
 
     input[type="text"],
-    input[type="tel"] {
+    input[type="tel"],
+    input[type="email"] {
       width: 100%;
       padding: 12px 14px;
       border: 1.5px solid #ddd;
@@ -272,6 +273,12 @@
         <div class="error-message" id="phoneError">正しい電話番号を入力してください</div>
       </div>
 
+      <div class="form-group">
+        <label for="emailAddress">メールアドレス<span class="required">必須</span></label>
+        <input type="email" id="emailAddress" placeholder="例：example@email.com" autocomplete="email">
+        <div class="error-message" id="emailError">正しいメールアドレスを入力してください</div>
+      </div>
+
       <button class="submit-btn" id="submitBtn" onclick="submitForm()">登録する</button>
     </div>
 
@@ -336,6 +343,7 @@
       let isValid = true;
       const name = document.getElementById('customerName').value.trim();
       const phone = document.getElementById('phoneNumber').value.trim();
+      const email = document.getElementById('emailAddress').value.trim();
 
       // 名前チェック
       if (!name) {
@@ -358,6 +366,17 @@
         document.getElementById('phoneError').classList.remove('show');
       }
 
+      // メールアドレスチェック
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!email || !emailPattern.test(email)) {
+        document.getElementById('emailAddress').classList.add('error');
+        document.getElementById('emailError').classList.add('show');
+        isValid = false;
+      } else {
+        document.getElementById('emailAddress').classList.remove('error');
+        document.getElementById('emailError').classList.remove('show');
+      }
+
       return isValid;
     }
 
@@ -367,6 +386,7 @@
 
       const name = document.getElementById('customerName').value.trim();
       const phone = document.getElementById('phoneNumber').value.trim();
+      const email = document.getElementById('emailAddress').value.trim();
       // ハイフンを除去して統一
       const phoneClean = phone.replace(/[-\s]/g, '');
 
@@ -382,7 +402,8 @@
             line_user_id: lineUserId,
             line_display_name: lineDisplayName,
             customer_name: name,
-            phone_number: phoneClean
+            phone_number: phoneClean,
+            email: email
           })
         });
 
@@ -421,6 +442,10 @@
       document.getElementById('phoneNumber').addEventListener('input', function() {
         this.classList.remove('error');
         document.getElementById('phoneError').classList.remove('show');
+      });
+      document.getElementById('emailAddress').addEventListener('input', function() {
+        this.classList.remove('error');
+        document.getElementById('emailError').classList.remove('show');
       });
     });
 
